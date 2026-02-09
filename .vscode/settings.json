@@ -1,4 +1,12 @@
 {
-  "editor.tabSize": 2,
-  "cSpell.words": ["mastra"]
+	"editor.tabSize": 2,
+	"cSpell.words": ["mastra"],
+	"editor.defaultFormatter": "biomejs.biome",
+	"editor.formatOnSave": true,
+	"editor.codeActionsOnSave": {
+		// Apply formatting on save
+		"source.fixAll.biome": "explicit",
+		// Organize imports on save
+		"source.organizeImports.biome": "explicit"
+	}
 }
