@@ -1,0 +1,20 @@
+{
+  "name": "shadow-me",
+  "version": "1.0.0",
+  "description": "Can You Work 24h?",
+  "homepage": "https://github.com/newbee1939/shadow-me#readme",
+  "bugs": {
+    "url": "https://github.com/newbee1939/shadow-me/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newbee1939/shadow-me.git"
+  },
+  "license": "MIT",
+  "author": "h6o",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
