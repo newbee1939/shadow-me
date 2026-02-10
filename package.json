@@ -1,0 +1,35 @@
+{
+	"name": "shadow-me",
+	"version": "1.0.0",
+	"description": "Can You Work 24h?",
+	"homepage": "https://github.com/newbee1939/shadow-me#readme",
+	"bugs": {
+		"url": "https://github.com/newbee1939/shadow-me/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/newbee1939/shadow-me.git"
+	},
+	"license": "MIT",
+	"author": "h6o",
+	"type": "module",
+	"main": "index.js",
+	"scripts": {
+		"dev": "mastra dev",
+		"build": "mastra build",
+		"lint": "biome lint src/",
+		"format": "biome format --write src/",
+		"biome:update": "biome migrate --write"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.3.14",
+		"@types/node": "^25.2.2",
+		"lefthook": "^2.1.0",
+		"mastra": "^1.2.0",
+		"typescript": "^5.9.3"
+	},
+	"dependencies": {
+		"@mastra/core": "^1.2.0",
+		"zod": "^4.3.6"
+	}
+}

@@ -1,0 +1,25 @@
+name: Auto Assign PR Creator
+
+on:
+  pull_request:
+    types:
+      - opened
+
+permissions: {}
+
+jobs:
+  assign-pr-creator:
+    runs-on: ubuntu-24.04
+
+    permissions:
+      pull-requests: write
+
+    # Skip if the PR is created by dependabot
+    if: github.actor != 'dependabot[bot]'
+
+    steps:
+      - name: Add PR creator to assignees
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh pr edit ${{ github.event.number }} --add-assignee ${{ github.actor }}
