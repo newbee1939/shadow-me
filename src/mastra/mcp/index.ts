@@ -11,9 +11,5 @@ export const mcpClient = new MCPClient({
           process.env.GITHUB_PERSONAL_ACCESS_TOKEN ?? "",
       },
     },
-    fetch: {
-      command: "npx",
-      args: ["-y", "@modelcontextprotocol/server-fetch"],
-    },
   },
 });
