@@ -1,0 +1,94 @@
+# 参考: https://docs.github.com/ja/code-security/dependabot/working-with-dependabot/automating-dependabot-with-github-actions
+name: Dependabot auto-merge
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  dependabot:
+    runs-on: ubuntu-24.04
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Determine Biome patch or minor update
+        id: biome
+        run: |
+          if [[ ("${UPDATE_TYPE}" == "version-update:semver-patch" || "${UPDATE_TYPE}" == "version-update:semver-minor") ]] && [[ "${DIRECTORY}" == "/" ]] && [[ "${DEPENDENCIES}" == *"@biomejs/biome"* ]]; then
+            echo "update=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "update=false" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+          DIRECTORY: ${{ steps.metadata.outputs.directory }}
+          DEPENDENCIES: ${{ steps.metadata.outputs.dependency-names }}
+
+      - name: Checkout repository
+        if: steps.biome.outputs.update == 'true'
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          fetch-depth: 0
+
+      - name: Setup tools with mise
+        if: steps.biome.outputs.update == 'true'
+        uses: jdx/mise-action@v3
+        with:
+          install: true
+          cache: true
+
+      - name: Install workspaces
+        if: steps.biome.outputs.update == 'true'
+        run: npm ci --ignore-scripts --no-audit --no-fund
+
+      - name: Run Biome schema migration
+        if: steps.biome.outputs.update == 'true'
+        run: npm run biome:update
+
+      - name: Detect schema changes
+        id: biome_update
+        if: steps.biome.outputs.update == 'true'
+        run: |
+          if [[ -n "$(git status --short)" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit Biome schema updates
+        if: steps.biome.outputs.update == 'true' && steps.biome_update.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "chore: update biome schema"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto-merge Dependabot patch and minor updates
+        if: steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --merge --auto "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
