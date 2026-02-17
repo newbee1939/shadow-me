@@ -1,4 +1,6 @@
 import { Agent } from "@mastra/core/agent";
+import { LibSQLStore } from "@mastra/libsql";
+import { Memory } from "@mastra/memory";
 import { mcpClient } from "../mcp";
 
 export const shadowMeAgent = new Agent({
@@ -24,4 +26,10 @@ export const shadowMeAgent = new Agent({
     },
   ],
   tools: await mcpClient.listTools(),
+  memory: new Memory({
+    storage: new LibSQLStore({
+      id: "libsql-storage",
+      url: "file:./agent.db",
+    }),
+  }),
 });
