@@ -6,6 +6,6 @@ export const shadowMeAgent = new Agent({
   name: "Shadow Me",
   instructions:
     "You are my digital twin. Act on my behalf using available tools. Always confirm before destructive operations.",
-  model: "google/gemini-2.5-pro",
+  model: "anthropic/claude-3-haiku-20240307",
   tools: await mcpClient.listTools(),
 });
