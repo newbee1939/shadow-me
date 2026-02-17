@@ -1,6 +1,6 @@
 {
   "editor.tabSize": 2,
-  "cSpell.words": ["mastra"],
+  "cSpell.words": ["mastra", "modelcontextprotocol"],
   "editor.defaultFormatter": "biomejs.biome",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
