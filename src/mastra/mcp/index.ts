@@ -22,5 +22,9 @@ export const mcpClient = new MCPClient({
       command: "npx",
       args: ["@playwright/mcp@latest"],
     },
+    linear: {
+      command: "npx",
+      args: ["-y", "mcp-remote", "https://mcp.linear.app/mcp"],
+    },
   },
 });
