@@ -11,6 +11,8 @@ npm ci
 cp .env.example .env
 ```
 
+[Add Mastra Docs MCP Server](https://mastra.ai/docs/build-with-ai/mcp-docs-server#cursor)
+
 Set your credentials in `.env`:
 
 Then start the dev server:
