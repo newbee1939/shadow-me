@@ -18,5 +18,9 @@ export const mcpClient = new MCPClient({
         GITHUB_PERSONAL_ACCESS_TOKEN: githubToken,
       },
     },
+    playwright: {
+      command: "npx",
+      args: ["@playwright/mcp@latest"],
+    },
   },
 });
