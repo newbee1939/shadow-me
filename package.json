@@ -10,7 +10,6 @@
     "type": "git",
     "url": "git+https://github.com/newbee1939/shadow-me.git"
   },
-  "license": "MIT",
   "author": "h6o",
   "type": "module",
   "scripts": {
