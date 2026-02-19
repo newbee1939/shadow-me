@@ -1,18 +1,16 @@
 # shadow-me
 
-Your digital twin AI agent that works on your behalf — powered by [Mastra](https://mastra.ai/), Google Gemini, and [MCP](https://modelcontextprotocol.io/).
+Your digital twin AI agent powered by [Mastra](https://mastra.ai/), Google Gemini, and [MCP](https://modelcontextprotocol.io/).
 
 ## Architecture
 
 ```
-Discord / Slack  →  shadow-me (Linear, MCP, …)  →  Linear（Cursor）
+Slack → shadow-me (Linear, MCP, …) → Linear → Cursor
 ```
 
-- **Discord or Slack**: You create or delegate tasks (e.g. “fix this bug”, “add this feature”). Those requests flow into the system.
-- **shadow-me**: Acts as a bridge that wraps multiple tools — [Linear](https://linear.app/) for issues and task state, [MCP](https://modelcontextprotocol.io/) and other integrations for tooling. It receives inputs from chat, creates or updates Linear issues, and orchestrates work via those tools.
-- **Cursor**: When you assign an issue to Cursor (or the Cursor agent) in Linear, Cursor picks up the task and executes it. So: **assign in Linear → Cursor runs the task**.
-
-End-to-end: chat (Discord/Slack) → shadow-me (Linear, MCP, etc.) → assign to Cursor in Linear → Cursor performs the work.
+- **Slack**: Create or delegate tasks via chat
+- **shadow-me**: AI agent that orchestrates tools (Linear, MCP, etc.) and manages task state
+- **Cursor**: Executes tasks assigned in Linear
 
 ## Setup
 
@@ -25,10 +23,21 @@ cp .env.example .env
 
 [Add Mastra Docs MCP Server](https://mastra.ai/docs/build-with-ai/mcp-docs-server#cursor)
 
-Set your credentials in `.env`:
-
-Then start the dev server:
+Set your credentials in `.env`, then:
 
 ```bash
 npm run dev
 ```
+
+## Project Structure
+
+- **`agents/`**: LLM agents (like n8n Agent Nodes) - define AI behavior and instructions
+- **`workflows/`**: Workflow definitions (like n8n workflows) - chain multiple steps together
+
+Example: `workflows/newsletter-workflow.ts` uses `agents/newsletter-agent.ts` to generate newsletters from RSS feeds.
+
+## Newsletter Workflow
+
+Automated newsletter generation from RSS feeds: fetch → filter important news → generate newsletter with explanations.
+
+Execute workflows via Mastra API endpoints or Studio UI (`npm run dev`).
