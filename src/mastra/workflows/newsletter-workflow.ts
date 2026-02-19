@@ -1,7 +1,8 @@
 import { createStep, createWorkflow } from "@mastra/core/workflows";
 import Parser from "rss-parser";
 import { z } from "zod";
-import { newsletterAgent } from "../agents/newsletter-agent";
+import { shadowMeAgent } from "../agents/shadow-me.js";
+import { DEFAULT_FEED_URLS } from "../config/newsletter-feeds.js";
 
 const parser = new Parser();
 
@@ -9,19 +10,20 @@ const fetchRssStep = createStep({
   id: "fetch-rss",
   description: "Fetch latest items from multiple RSS feed URLs.",
   inputSchema: z.object({
-    feedUrls: z.array(z.string().url()).min(1).max(20),
+    feedUrls: z.array(z.string().url()).min(1).max(20).optional(),
   }),
   outputSchema: z.object({
     prompt: z.string(),
   }),
   execute: async ({ inputData }) => {
+    const feedUrls = inputData?.feedUrls ?? DEFAULT_FEED_URLS;
     const items: Array<{
       title: string;
       link: string;
       snippet: string;
       date?: string;
     }> = [];
-    for (const url of inputData.feedUrls) {
+    for (const url of feedUrls) {
       try {
         const feed = await parser.parseURL(url);
         for (const item of feed.items.slice(0, 10)) {
@@ -48,7 +50,7 @@ const fetchRssStep = createStep({
   },
 });
 
-const newsletterStep = createStep(newsletterAgent, {
+const newsletterStep = createStep(shadowMeAgent, {
   structuredOutput: {
     schema: z.object({
       newsletter: z.string().describe("解説付きメルマガ本文（Markdown可）"),
@@ -61,7 +63,7 @@ export const newsletterWorkflow = createWorkflow({
   description:
     "Fetches latest news from multiple RSS feeds, picks important ones, and outputs a newsletter with explanations.",
   inputSchema: z.object({
-    feedUrls: z.array(z.string().url()).min(1).max(20),
+    feedUrls: z.array(z.string().url()).min(1).max(20).optional(),
   }),
   outputSchema: z.object({
     newsletter: z.string(),
