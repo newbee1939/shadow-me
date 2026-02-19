@@ -41,11 +41,24 @@ const fetchRssStep = createStep({
     const prompt = items
       .map(
         (i, idx) =>
-          `[${idx + 1}] ${i.title}\n   URL: ${i.link}\n   概要: ${i.snippet}${i.date ? `\n   日付: ${i.date}` : ""}`,
+          `[${idx + 1}] ${i.title}\n   URL: ${i.link}\n   Snippet: ${i.snippet}${i.date ? `\n   Date: ${i.date}` : ""}`,
       )
       .join("\n\n");
     return {
-      prompt: `以下のRSSニュース一覧から重要なものをピックアップし、解説を交えたメルマガ形式（見出し・要約・解説・リンク）でまとめてください。\n\n## ニュース一覧\n\n${prompt}`,
+      prompt: `Pick important news from the RSS feed list below and create a newsletter with explanations in the following format: headings, summaries, explanations, and links.
+
+**REQUIRED TASK**: Before creating the newsletter, you **MUST** access each article URL and fetch the full content.
+
+**Steps**:
+1. Use the browser_navigate tool to access each article URL (e.g., browser_navigate({ url: "article URL" }))
+2. Wait a moment for the page to load
+3. Use the browser_snapshot tool to get the page's accessibility tree
+4. Extract the article body text from the snapshot
+5. After reviewing the full content, extract important information and compile it into the newsletter
+
+RSS snippets alone are insufficient. You MUST access each article URL and read the full content. Do NOT create the newsletter without using the tools.
+
+## News List\n\n${prompt}`,
     };
   },
 });
@@ -53,7 +66,9 @@ const fetchRssStep = createStep({
 const newsletterStep = createStep(shadowMeAgent, {
   structuredOutput: {
     schema: z.object({
-      newsletter: z.string().describe("解説付きメルマガ本文（Markdown可）"),
+      newsletter: z
+        .string()
+        .describe("Newsletter content with explanations (Markdown format)"),
     }),
   },
 });
