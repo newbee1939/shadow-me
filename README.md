@@ -28,16 +28,3 @@ Set your credentials in `.env`, then:
 ```bash
 npm run dev
 ```
-
-## Project Structure
-
-- **`agents/`**: LLM agents (like n8n Agent Nodes) - define AI behavior and instructions
-- **`workflows/`**: Workflow definitions (like n8n workflows) - chain multiple steps together
-
-Example: `workflows/newsletter-workflow.ts` uses `agents/newsletter-agent.ts` to generate newsletters from RSS feeds.
-
-## Newsletter Workflow
-
-Automated newsletter generation from RSS feeds: fetch → filter important news → generate newsletter with explanations.
-
-Execute workflows via Mastra API endpoints or Studio UI (`npm run dev`).
