@@ -24,9 +24,6 @@ const fetchRssStep = createStep({
   id: "fetch-rss",
   description:
     "Fetch articles from RSS feeds published within the last 24 hours.",
-  outputSchema: z.object({
-    prompt: z.string(),
-  }),
   execute: async () => {
     const feedUrls = RSS_FEED_URLS;
     const cutoffTime = get24HoursAgo();
