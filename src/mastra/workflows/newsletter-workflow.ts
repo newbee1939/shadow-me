@@ -27,31 +27,29 @@ const fetchRssStep = createStep({
   execute: async () => {
     const feedUrls = RSS_FEED_URLS;
     const cutoffTime = get24HoursAgo();
-    const articles: Array<{
-      title: string;
-      link: string;
-      snippet: string;
-      date?: string;
-    }> = [];
 
-    for (const url of feedUrls) {
-      try {
-        const feed = await parser.parseURL(url);
-        for (const item of feed.items) {
-          const pubDate = parseDate(item.pubDate);
-          if (pubDate && pubDate >= cutoffTime) {
-            articles.push({
-              title: item.title ?? "",
-              link: item.link ?? "",
-              snippet: item.contentSnippet ?? item.content?.slice(0, 300) ?? "",
-              date: item.pubDate ?? undefined,
-            });
-          }
-        }
-      } catch (e) {
-        console.warn(`RSS fetch failed for ${url}:`, e);
+    const feedResults = await Promise.allSettled(
+      feedUrls.map((url) => parser.parseURL(url)),
+    );
+
+    const articles = feedResults.flatMap((result, index) => {
+      if (result.status === "rejected") {
+        console.warn(`RSS fetch failed for ${feedUrls[index]}:`, result.reason);
+        return [];
       }
-    }
+      const feed = result.value;
+      return feed.items
+        .filter((item) => {
+          const pubDate = parseDate(item.pubDate);
+          return pubDate !== null && pubDate >= cutoffTime;
+        })
+        .map((item) => ({
+          title: item.title ?? "",
+          link: item.link ?? "",
+          snippet: item.contentSnippet ?? item.content?.slice(0, 300) ?? "",
+          date: item.pubDate ?? undefined,
+        }));
+    });
 
     const articlesList = articles
       .map(
