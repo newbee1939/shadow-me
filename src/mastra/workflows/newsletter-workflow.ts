@@ -6,16 +6,16 @@ import { DEFAULT_FEED_URLS } from "../config/newsletter-feeds.js";
 
 const parser = new Parser();
 
-// 24時間前のタイムスタンプを取得
 const get24HoursAgo = () => {
   const now = new Date();
   now.setHours(now.getHours() - 24);
   return now.getTime();
 };
 
-// 日付文字列をパースしてタイムスタンプに変換
 const parseDate = (dateStr: string | undefined): number | null => {
-  if (!dateStr) return null;
+  if (!dateStr) {
+    return null;
+  }
   const date = new Date(dateStr);
   return Number.isNaN(date.getTime()) ? null : date.getTime();
 };
