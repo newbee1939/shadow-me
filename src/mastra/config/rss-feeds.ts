@@ -1,4 +1,4 @@
-export const DEFAULT_FEED_URLS = [
+export const RSS_FEED_URLS = [
   // Hacker News
   "https://hnrss.org/frontpage",
   // はてなブックマーク テクノロジー
