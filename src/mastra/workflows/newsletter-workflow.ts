@@ -15,6 +15,7 @@ const fetchRssStep = createStep({
     const feedUrls = RSS_FEED_URLS;
     const cutoffTime = get24HoursAgo();
 
+    // NOTE: Promise.allSettled is used to wait for all the RSS feeds to be fetched, even if some of them fail.
     const feedResults = await Promise.allSettled(
       feedUrls.map((url) => parser.parseURL(url)),
     );
