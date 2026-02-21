@@ -1,5 +1,6 @@
 import { Mastra } from "@mastra/core";
 import { LibSQLStore } from "@mastra/libsql";
+import { PinoLogger } from "@mastra/loggers";
 import {
   DefaultExporter,
   Observability,
@@ -11,6 +12,7 @@ import { newsletterWorkflow } from "./workflows/newsletter-workflow";
 export const mastra = new Mastra({
   agents: { shadowMeAgent },
   workflows: { newsletterWorkflow },
+  logger: new PinoLogger({ name: "shadow-me", level: "info" }),
   storage: new LibSQLStore({
     id: "mastra-storage",
     url: "file:./mastra.db",
