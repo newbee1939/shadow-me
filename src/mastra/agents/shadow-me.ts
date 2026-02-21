@@ -15,7 +15,8 @@ export const shadowMeAgent = new Agent({
   model: [
     {
       // https://mastra.ai/models/providers/openai
-      model: "openai/gpt-5-nano",
+      // model: "openai/gpt-5-nano",
+      model: "openai/gpt-5.2",
       maxRetries: 3,
     },
     // {
