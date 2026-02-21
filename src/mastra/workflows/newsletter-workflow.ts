@@ -25,8 +25,8 @@ const fetchRssStep = createStep({
         console.warn(`RSS fetch failed for ${feedUrls[index]}:`, result.reason);
         return [];
       }
-      const feed = result.value;
-      return feed.items
+
+      return result.value.items
         .filter((item) => {
           const pubDate = parseDate(item.pubDate);
           return pubDate !== null && pubDate >= cutoffTime;
