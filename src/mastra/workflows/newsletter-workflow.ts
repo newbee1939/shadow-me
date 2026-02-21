@@ -3,22 +3,9 @@ import Parser from "rss-parser";
 import { z } from "zod";
 import { shadowMeAgent } from "../agents/shadow-me";
 import { RSS_FEED_URLS } from "../config/rss-feeds";
+import { get24HoursAgo, parseDate } from "../utils/date";
 
 const parser = new Parser();
-
-const get24HoursAgo = () => {
-  const now = new Date();
-  now.setHours(now.getHours() - 24);
-  return now.getTime();
-};
-
-const parseDate = (dateStr: string | undefined): number | null => {
-  if (!dateStr) {
-    return null;
-  }
-  const date = new Date(dateStr);
-  return Number.isNaN(date.getTime()) ? null : date.getTime();
-};
 
 const fetchRssStep = createStep({
   id: "fetch-rss",
