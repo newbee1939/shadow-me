@@ -12,9 +12,15 @@ export const newsletterAgent = new Agent({
     "Be concise and accurate; do not make up content.",
   ],
   model: [
+    // https://mastra.ai/models/providers/google
+    {
+      model: "google/gemini-2.5-pro",
+      maxRetries: 3,
+    },
+    // https://mastra.ai/models/providers/openai
     {
       model: "openai/gpt-5.2",
-      maxRetries: 3,
+      maxRetries: 2,
     },
   ],
   tools: { fetch_url: fetchUrlTool },
