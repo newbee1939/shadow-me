@@ -1,52 +1,66 @@
-export const RSS_FEED_URLS = [
+/** Mapping of media keys to RSS feed URLs */
+export const RSS_FEEDS: Record<string, string> = {
   // Hacker News
-  "https://hnrss.org/frontpage",
+  hackernews: "https://hnrss.org/frontpage",
   // はてなブックマーク テクノロジー
-  "https://b.hatena.ne.jp/hotentry/it.rss",
+  hatena_it: "https://b.hatena.ne.jp/hotentry/it.rss",
   // はてなブックマーク 総合
-  "https://b.hatena.ne.jp/hotentry/all.rss",
+  hatena_all: "https://b.hatena.ne.jp/hotentry/all.rss",
   // Publickey
-  "https://www.publickey1.jp/atom.xml",
+  publickey: "https://www.publickey1.jp/atom.xml",
   // Qiita
-  "https://qiita.com/popular-items/feed",
+  qiita: "https://qiita.com/popular-items/feed",
   // Zenn
-  "https://zenn.dev/feed",
+  zenn: "https://zenn.dev/feed",
   // ITmedia
-  "https://rss.itmedia.co.jp/rss/2.0/topstory.xml",
+  itmedia: "https://rss.itmedia.co.jp/rss/2.0/topstory.xml",
   // Gigazine
-  "https://gigazine.net/news/rss_2.0/",
+  gigazine: "https://gigazine.net/news/rss_2.0/",
   // ZDNET
-  "https://www.zdnet.com/news/rss.xml",
+  zdnet: "https://www.zdnet.com/news/rss.xml",
   // coliss（コリス）
-  "https://coliss.com/feed/",
+  coliss: "https://coliss.com/feed/",
   // Product Hunt
-  "https://www.producthunt.com/feed",
+  producthunt: "https://www.producthunt.com/feed",
   // Dev.to
-  "https://dev.to/feed/",
+  devto: "https://dev.to/feed/",
   // HACKERNOON
-  "https://hackernoon.com/feed",
+  hackernoon: "https://hackernoon.com/feed",
   // @IT
-  "https://rss.itmedia.co.jp/rss/2.0/ait.xml",
+  ait: "https://rss.itmedia.co.jp/rss/2.0/ait.xml",
   // GIZMODO
-  "https://www.gizmodo.jp/index.xml",
+  gizmodo: "https://www.gizmodo.jp/index.xml",
   // TechCrunch
-  "https://techcrunch.com/feed/",
+  techcrunch: "https://techcrunch.com/feed/",
   // Workship
-  "https://goworkship.com/magazine/feed/",
+  workship: "https://goworkship.com/magazine/feed/",
   // デイリーポータルZ
-  "https://dailyportalz.jp/feed/headline",
+  dailyportalz: "https://dailyportalz.jp/feed/headline",
   // はてなブックマーク 暮らし
-  "https://b.hatena.ne.jp/hotentry/life.rss",
+  hatena_life: "https://b.hatena.ne.jp/hotentry/life.rss",
   // SRE Weekly
-  "https://sreweekly.com/feed/",
+  sreweekly: "https://sreweekly.com/feed/",
   // Findy
-  "https://api.findy-code.io/rss/media/recent",
+  findy: "https://api.findy-code.io/rss/media/recent",
   // レバテック
-  "https://levtech.jp/media/feed/",
+  levtech: "https://levtech.jp/media/feed/",
   // note
-  "https://note.com/notemagazine/m/mf2e92ffd6658/rss",
+  note: "https://note.com/notemagazine/m/mf2e92ffd6658/rss",
   // Google Cloud Release Notes
-  "https://docs.cloud.google.com/feeds/gcp-release-notes.xml",
+  gcp_release_notes:
+    "https://docs.cloud.google.com/feeds/gcp-release-notes.xml",
   // はてなブックマーク SRE
-  "https://b.hatena.ne.jp/q/sre?date_range=5y&sort=recent&target=all&users=3&mode=rss",
-];
+  hatena_sre:
+    "https://b.hatena.ne.jp/q/sre?date_range=5y&sort=recent&target=all&users=3&mode=rss",
+};
+
+/**
+ * Returns RSS feed URLs for the given media keys.
+ * If keys is omitted or empty, returns all feed URLs. Unknown keys are ignored.
+ */
+export function getFeedUrls(keys?: string[]): string[] {
+  if (!keys || keys.length === 0) {
+    return Object.values(RSS_FEEDS);
+  }
+  return keys.filter((key) => key in RSS_FEEDS).map((key) => RSS_FEEDS[key]);
+}

@@ -2,20 +2,24 @@ import { createStep, createWorkflow } from "@mastra/core/workflows";
 import Parser from "rss-parser";
 import { z } from "zod";
 import { newsletterAgent } from "../agents/newsletter-agent";
-import { RSS_FEED_URLS } from "../config/rss-feeds";
+import { getFeedUrls } from "../config/rss-feeds";
 import { fetchRecentArticles } from "../domains/feed/rss";
 import { get24HoursAgo } from "../utils/date";
 
 const parser = new Parser();
+
+/** Media keys of feeds to fetch for the newsletter. If not specified, all feeds are used. Example: ["hackernews", "qiita", "zenn"] */
+const NEWSLETTER_FEED_KEYS: string[] | undefined = undefined;
 
 const fetchRssStep = createStep({
   id: "fetch-rss",
   description:
     "Fetch articles from RSS feeds published within the last 24 hours.",
   execute: async () => {
+    const feedUrls = getFeedUrls(NEWSLETTER_FEED_KEYS);
     const cutoffTime = get24HoursAgo();
     const articles = await fetchRecentArticles(
-      RSS_FEED_URLS,
+      feedUrls,
       cutoffTime,
       (url) => parser.parseURL(url),
       (url, reason) => {
