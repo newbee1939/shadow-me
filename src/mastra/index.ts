@@ -27,4 +27,17 @@ export const mastra = new Mastra({
       },
     },
   }),
+  server: {
+    apiRoutes: [
+      {
+        path: "/slack/events",
+        method: "POST",
+        handler: async (c) => {
+          const { handleSlackEvent } = await import("../slack/routes.js");
+          const request = c.req.raw;
+          return await handleSlackEvent(request);
+        },
+      },
+    ],
+  },
 });
