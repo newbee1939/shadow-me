@@ -1,12 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": [
-    "src/mastra/index.ts",
-    "src/mastra/agents/**/*.ts",
-    "src/mastra/workflows/**/*.ts",
-    "src/mastra/tools/**/*.ts",
-    "src/mastra/mcp/index.ts"
-  ],
+  "entry": ["src/mastra/index.ts"],
   "project": ["src/**/*.ts"],
   "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true
