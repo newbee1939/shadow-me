@@ -2,14 +2,23 @@ import { createStep, createWorkflow } from "@mastra/core/workflows";
 import Parser from "rss-parser";
 import { z } from "zod";
 import { newsletterAgent } from "../agents/newsletter-agent";
-import { getFeedUrls } from "../config/rss-feeds";
+import { type FeedKey, getFeedUrls } from "../config/rss-feeds";
 import { fetchRecentArticles } from "../domains/feed/rss";
 import { get24HoursAgo } from "../utils/date";
 
 const parser = new Parser();
 
-/** Media keys of feeds to fetch for the newsletter. If not specified, all feeds are used. Example: ["hackernews", "qiita", "zenn"] */
-const NEWSLETTER_FEED_KEYS: string[] | undefined = undefined;
+const NEWSLETTER_FEED_KEYS: FeedKey[] | undefined = [
+  "hackernews",
+  "hatena_it",
+  "qiita",
+  "zenn",
+  "publickey",
+  "itmedia",
+  "techcrunch",
+  "sreweekly",
+  "hatena_sre",
+];
 
 const fetchRssStep = createStep({
   id: "fetch-rss",
@@ -34,7 +43,7 @@ const fetchRssStep = createStep({
       )
       .join("\n\n");
 
-    const prompt = `以下のRSSフィードから取得した記事（過去24時間以内）の中から、重要そうなニュースを10個くらいピックアップして、解説付きのメールマガジンを作成してください。
+    const prompt = `私はSREエンジニアです。以下のRSSフィードから取得した記事（過去24時間以内）の中から、私にとって重要そうなニュースを10個くらいピックアップして、分かりやすい解説付きのメールマガジンを作成してください。
 
 重要な記事については、必要に応じて fetch_url ツールで記事URLにアクセスし、本文を取得してから解説を書いてください。
 

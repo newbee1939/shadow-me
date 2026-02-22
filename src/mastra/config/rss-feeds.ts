@@ -1,5 +1,5 @@
 /** Mapping of media keys to RSS feed URLs */
-export const RSS_FEEDS: Record<string, string> = {
+export const RSS_FEEDS = {
   // Hacker News
   hackernews: "https://hnrss.org/frontpage",
   // はてなブックマーク テクノロジー
@@ -52,13 +52,15 @@ export const RSS_FEEDS: Record<string, string> = {
   // はてなブックマーク SRE
   hatena_sre:
     "https://b.hatena.ne.jp/q/sre?date_range=5y&sort=recent&target=all&users=3&mode=rss",
-};
+} as const satisfies Record<string, string>;
+
+export type FeedKey = keyof typeof RSS_FEEDS;
 
 /**
  * Returns RSS feed URLs for the given media keys.
  * If keys is omitted or empty, returns all feed URLs. Unknown keys are ignored.
  */
-export function getFeedUrls(keys?: string[]): string[] {
+export function getFeedUrls(keys?: FeedKey[]): string[] {
   if (!keys || keys.length === 0) {
     return Object.values(RSS_FEEDS);
   }
