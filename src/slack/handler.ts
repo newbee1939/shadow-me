@@ -7,11 +7,22 @@ export class SlackHandler {
   private client: WebClient;
   private agent: Agent;
   private signingSecret: string;
+  private botUserId?: string;
 
   constructor(config: SlackConfig, agent: Agent) {
     this.client = new WebClient(config.botToken);
     this.agent = agent;
     this.signingSecret = config.signingSecret;
+    this.initBotUserId();
+  }
+
+  private async initBotUserId() {
+    try {
+      const authResult = await this.client.auth.test();
+      this.botUserId = authResult.user_id as string;
+    } catch (error) {
+      console.error("Failed to get bot user ID:", error);
+    }
   }
 
   async handleEvent(
@@ -45,11 +56,15 @@ export class SlackHandler {
     ts: string;
     thread_ts?: string;
   }) {
+    if (this.botUserId && event.user === this.botUserId) {
+      return;
+    }
+
     const threadTs = event.thread_ts || event.ts;
     const channel = event.channel;
 
     try {
-      await this.client.chat.postMessage({
+      const thinkingMessage = await this.client.chat.postMessage({
         channel,
         thread_ts: threadTs,
         text: "考え中...",
@@ -63,29 +78,18 @@ export class SlackHandler {
       });
 
       let fullResponse = "";
-      let lastUpdate = Date.now();
-      const updateInterval = 2000;
+      const messageTs = thinkingMessage.ts;
 
       for await (const chunk of stream) {
         if (chunk.type === "text") {
           fullResponse += chunk.text;
-
-          const now = Date.now();
-          if (now - lastUpdate > updateInterval) {
-            await this.client.chat.postMessage({
-              channel,
-              thread_ts: threadTs,
-              text: fullResponse,
-            });
-            lastUpdate = now;
-          }
         }
       }
 
-      if (fullResponse) {
-        await this.client.chat.postMessage({
+      if (fullResponse && messageTs) {
+        await this.client.chat.update({
           channel,
-          thread_ts: threadTs,
+          ts: messageTs,
           text: fullResponse,
         });
       }
