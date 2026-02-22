@@ -28,3 +28,25 @@ Set your credentials in `.env`, then:
 ```bash
 npm run dev
 ```
+
+## Development
+
+### Code Quality
+
+This project uses several tools to maintain code quality:
+
+- **Biome**: Linting and formatting
+  ```bash
+  npm run lint
+  npm run format
+  ```
+
+- **Knip**: Find unused files, dependencies, and exports
+  ```bash
+  npm run knip
+  ```
+
+- **Vitest**: Testing framework
+  ```bash
+  npm run test
+  ```
