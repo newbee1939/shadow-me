@@ -1,7 +1,7 @@
 import { createStep, createWorkflow } from "@mastra/core/workflows";
 import Parser from "rss-parser";
 import { z } from "zod";
-import { shadowMeAgent } from "../agents/shadow-me";
+import { newsletterAgent } from "../agents/newsletter-agent";
 import { RSS_FEED_URLS } from "../config/rss-feeds";
 import { fetchRecentArticles } from "../domains/feed/rss";
 import { get24HoursAgo } from "../utils/date";
@@ -48,7 +48,7 @@ ${articlesList}`;
   },
 });
 
-const newsletterStep = createStep(shadowMeAgent, {
+const newsletterStep = createStep(newsletterAgent, {
   structuredOutput: {
     schema: z.object({
       newsletter: z

@@ -6,11 +6,12 @@ import {
   Observability,
   SensitiveDataFilter,
 } from "@mastra/observability";
+import { newsletterAgent } from "./agents/newsletter-agent";
 import { shadowMeAgent } from "./agents/shadow-me";
 import { newsletterWorkflow } from "./workflows/newsletter-workflow";
 
 export const mastra = new Mastra({
-  agents: { shadowMeAgent },
+  agents: { shadowMeAgent, newsletterAgent },
   workflows: { newsletterWorkflow },
   logger: new PinoLogger({ name: "shadow-me", level: "info" }),
   storage: new LibSQLStore({
