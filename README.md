@@ -77,3 +77,53 @@ shadow-me can be integrated with Slack to respond to mentions and execute tasks.
 7. **Restart the server**: After configuring, restart your Mastra server
 
 Now you can mention @shadow-me in Slack channels or send direct messages to interact with your AI agent!
+
+## Scheduled Workflows
+
+shadow-me supports periodic workflow execution using cron expressions.
+
+### Setup
+
+1. **Configure Environment Variables**: Set the following in your `.env`:
+   ```
+   ENABLE_NEWSLETTER_CRON=true
+   NEWSLETTER_CRON=0 9 * * 1
+   ```
+
+2. **Start the Scheduler**: Run the scheduler in a separate process:
+   ```bash
+   npm run scheduler
+   ```
+
+### Cron Expression Format
+
+```
+* * * * *
+│ │ │ │ │
+│ │ │ │ └─ Weekday (0-7, 0 and 7 are Sunday)
+│ │ │ └─── Month (1-12)
+│ │ └───── Day of Month (1-31)
+│ └─────── Hour (0-23)
+└───────── Minute (0-59)
+```
+
+### Examples
+
+- `0 9 * * 1` - Every Monday at 9:00 AM
+- `0 */4 * * *` - Every 4 hours
+- `30 8 * * 1-5` - Weekdays at 8:30 AM
+
+### Adding Custom Scheduled Jobs
+
+Edit `src/scheduler/index.ts` to add more scheduled workflows:
+
+```typescript
+const customJobs: ScheduledJob[] = [
+  {
+    name: "My Custom Job",
+    cronExpression: "0 10 * * *",
+    workflowId: "myWorkflow",
+    enabled: true,
+  },
+];
+```
