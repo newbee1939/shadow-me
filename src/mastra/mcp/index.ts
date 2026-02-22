@@ -16,7 +16,7 @@ const ALL_MCP_SERVERS = {
   }),
   playwright: {
     command: "npx",
-    args: ["@playwright/mcp@latest"],
+    args: ["-y", "@playwright/mcp@latest"],
   },
   linear: {
     command: "npx",
