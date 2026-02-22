@@ -28,3 +28,39 @@ Set your credentials in `.env`, then:
 ```bash
 npm run dev
 ```
+
+## Code Quality
+
+### Knip Integration
+
+This project uses [Knip](https://knip.dev/) to detect unused files, dependencies, and exports, integrated with AI agents for automated code cleanup.
+
+#### Run Knip Analysis
+
+```bash
+npm run knip
+```
+
+#### Auto-fix Issues (use with caution)
+
+```bash
+npm run knip:fix
+```
+
+#### AI-Powered Code Cleanup
+
+The `knipAgent` can analyze your codebase and provide intelligent recommendations:
+
+```bash
+npm run dev
+# Then interact with the knip-cleaner agent
+```
+
+#### GitHub Actions
+
+Knip analysis runs automatically on:
+- Pull requests to main
+- Push to main
+- Weekly schedule (Monday at midnight UTC)
+
+Results are commented on PRs and uploaded as artifacts.
