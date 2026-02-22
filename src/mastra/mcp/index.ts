@@ -44,7 +44,7 @@ export function createMcpClient(
   );
 
   return new MCPClient({
-    id: options?.id ?? `mcp-${keys.sort().join("-")}`,
+    id: options?.id ?? `mcp-${Object.keys(servers).sort().join("-")}`,
     servers,
     timeout: options?.timeout,
   });
