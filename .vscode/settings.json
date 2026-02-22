@@ -9,6 +9,7 @@
     "libsql",
     "mastra",
     "modelcontextprotocol",
+    "vitest",
     "Workship",
     "ZDNET"
   ],
