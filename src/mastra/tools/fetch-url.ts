@@ -11,7 +11,7 @@ export const fetchUrlTool = createTool({
     "Fetch the content of a URL via HTTP GET. Returns the raw response body. Use to read article or page content. Does not execute JavaScript.",
   inputSchema: z.object({
     url: z
-      .url()
+      .string()
       .describe("The URL to fetch (e.g. https://example.com/article)"),
   }),
   execute: async ({ url }) => {
