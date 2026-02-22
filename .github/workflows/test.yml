@@ -6,6 +6,10 @@ on:
     types: [opened, synchronize]
     paths:
       - 'src/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - 'vitest.config.ts'
 
 permissions: {}
 
