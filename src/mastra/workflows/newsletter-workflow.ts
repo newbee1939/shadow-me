@@ -61,13 +61,19 @@ ${articlesList}`;
   },
 });
 
-const newsletterStep = createStep(newsletterAgent, {
-  structuredOutput: {
-    schema: z.object({
-      newsletter: z
-        .string()
-        .describe("Newsletter content with explanations (Markdown format)"),
-    }),
+// Do not use structuredOutput: Gemini does not support "function calling" (i.e. tool use)
+// and response format application/json (structured output) at the same time.
+// This step uses newsletterAgent with the fetch_url tool, so we cannot request JSON output.
+const newsletterStep = createStep(newsletterAgent);
+
+const toNewsletterOutputStep = createStep({
+  id: "to-newsletter-output",
+  description: "Map agent text output to workflow output shape.",
+  inputSchema: z.object({ text: z.string() }),
+  outputSchema: z.object({ newsletter: z.string() }),
+  execute: async ({ getStepResult }) => {
+    const prev = getStepResult("newsletter") as { text: string };
+    return { newsletter: prev.text };
   },
 });
 
@@ -82,4 +88,5 @@ export const newsletterWorkflow = createWorkflow({
 })
   .then(fetchRssStep)
   .then(newsletterStep)
+  .then(toNewsletterOutputStep)
   .commit();

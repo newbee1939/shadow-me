@@ -1,7 +1,7 @@
 import type Parser from "rss-parser";
 import { parseDate } from "../../utils/date";
 
-export type Article = {
+type Article = {
   title: string;
   link: string;
   snippet: string;
