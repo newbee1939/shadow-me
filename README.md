@@ -62,12 +62,12 @@ shadow-me can be integrated with Slack to respond to mentions and execute tasks.
    ```
    https://your-server.com/api/slack/events
    ```
-   
+
    For local development, use [ngrok](https://ngrok.com/) to expose your local server:
    ```bash
    ngrok http 4111
    ```
-   
+
    Then use the ngrok URL: `https://your-ngrok-url.ngrok.io/api/slack/events`
 
 6. **Subscribe to Events**: Add the following bot events:
@@ -127,3 +127,24 @@ const customJobs: ScheduledJob[] = [
   },
 ];
 ```
+## Development
+
+### Code Quality
+
+This project uses several tools to maintain code quality:
+
+- **Biome**: Linting and formatting
+  ```bash
+  npm run lint
+  npm run format
+  ```
+
+- **Knip**: Find unused files, dependencies, and exports
+  ```bash
+  npm run knip
+  ```
+
+- **Vitest**: Testing framework
+  ```bash
+  npm run test
+  ```
