@@ -14,15 +14,6 @@ import { newsletterWorkflow } from "./workflows/newsletter-workflow";
 export const mastra = new Mastra({
   agents: { shadowMeAgent, newsletterAgent },
   workflows: { newsletterWorkflow },
-  // server: {
-  //   apiRoutes: [
-  //     registerApiRoute("/slack/shadow-me/events", {
-  //       method: "POST",
-  //       requiresAuth: false,
-  //       handler: async (c) => await slackEventsPost(c.req.raw),
-  //     }),
-  //   ],
-  // },
   server: {
     apiRoutes: slackRoutes,
   },
