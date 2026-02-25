@@ -66,9 +66,12 @@ export const slackRoutes = [
       }
 
       const event = payload.event;
-      if (!event || event.bot_id || event.subtype) return c.json({ ok: true });
-      if (event.type !== "app_mention" && event.type !== "message")
+      if (!event || event.bot_id || event.subtype) {
         return c.json({ ok: true });
+      }
+      if (event.type !== "app_mention" && event.type !== "message") {
+        return c.json({ ok: true });
+      }
 
       const message = (event.text ?? "").replace(/<@[A-Z0-9]+>/g, "").trim();
       const slackClient = new WebClient(BOT_TOKEN);
