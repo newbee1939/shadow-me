@@ -29,22 +29,6 @@ Set your credentials in `.env`, then:
 npm run dev
 ```
 
-### Local Slack App Testing
-
-To test the Slack app locally with webhooks:
-
-```bash
-brew install ngrok
-
-# Expose local port 4111 for incoming webhooks
-ngrok http 4111
-
-# Start the development server
-npm run dev
-```
-
-Then configure your Slack app's request URLs (e.g. event subscriptions, slash commands) to use the HTTPS URL provided by `ngrok`.
-
 ## Development
 
 ### Code Quality
@@ -66,3 +50,19 @@ This project uses several tools to maintain code quality:
   ```bash
   npm run test
   ```
+
+### Local Slack App Testing
+
+To test the Slack app locally with webhooks:
+
+```bash
+brew install ngrok
+
+# Expose local port 4111 for incoming webhooks
+ngrok http 4111
+
+# Start the development server
+npm run dev
+```
+
+Then configure your Slack app's request URLs (e.g. event subscriptions, slash commands) to use the HTTPS URL provided by `ngrok`.
