@@ -1,5 +1,4 @@
 import { Mastra } from "@mastra/core";
-import { registerApiRoute } from "@mastra/core/server";
 import { LibSQLStore } from "@mastra/libsql";
 import { PinoLogger } from "@mastra/loggers";
 import {
@@ -9,20 +8,23 @@ import {
 } from "@mastra/observability";
 import { newsletterAgent } from "./agents/newsletter-agent";
 import { shadowMeAgent } from "./agents/shadow-me";
-import { POST as slackEventsPost } from "./slack/routes";
+import { slackRoutes } from "./slack/routes";
 import { newsletterWorkflow } from "./workflows/newsletter-workflow";
 
 export const mastra = new Mastra({
   agents: { shadowMeAgent, newsletterAgent },
   workflows: { newsletterWorkflow },
+  // server: {
+  //   apiRoutes: [
+  //     registerApiRoute("/slack/shadow-me/events", {
+  //       method: "POST",
+  //       requiresAuth: false,
+  //       handler: async (c) => await slackEventsPost(c.req.raw),
+  //     }),
+  //   ],
+  // },
   server: {
-    apiRoutes: [
-      registerApiRoute("/slack/shadow-me/events", {
-        method: "POST",
-        requiresAuth: false,
-        handler: async (c) => await slackEventsPost(c.req.raw),
-      }),
-    ],
+    apiRoutes: slackRoutes,
   },
   logger: new PinoLogger({ name: "shadow-me", level: "info" }),
   storage: new LibSQLStore({
