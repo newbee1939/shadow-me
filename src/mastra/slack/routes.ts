@@ -17,7 +17,12 @@ function verifySlackRequest(
   body: string,
 ): boolean {
   const fiveMinutesAgo = Math.floor(Date.now() / 1000) - 60 * 5;
-  if (parseInt(timestamp, 10) < fiveMinutesAgo) return false;
+  // Reject requests older than 5 minutes to prevent replay attacks.
+  // Even if an attacker captures a valid signed request, they cannot reuse it
+  // after the 5-minute window has passed.
+  if (parseInt(timestamp, 10) < fiveMinutesAgo) {
+    return false;
+  }
 
   const expected =
     "v0=" +
