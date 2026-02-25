@@ -13,7 +13,6 @@ const SIGNING_SECRET = process.env.SLACK_SHADOW_ME_SIGNING_SECRET ?? "";
 export const slackRoutes = [
   registerApiRoute("/slack/shadow-me/events", {
     method: "POST",
-    requiresAuth: false,
     handler: async (c) => {
       try {
         const body = await c.req.text();
