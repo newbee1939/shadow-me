@@ -36,6 +36,7 @@ function verifySlackRequest(
   ) {
     return false;
   }
+
   return crypto.timingSafeEqual(
     Buffer.from(expected, "utf8"),
     Buffer.from(signature, "utf8"),
