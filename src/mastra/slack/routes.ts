@@ -3,9 +3,9 @@
  * Request URL: https://<your-host>/slack/shadow-me/events
  */
 
+import * as crypto from "node:crypto";
 import { registerApiRoute } from "@mastra/core/server";
 import { WebClient } from "@slack/web-api";
-import * as crypto from "crypto";
 
 const BOT_TOKEN = process.env.SLACK_SHADOW_ME_BOT_TOKEN ?? "";
 const SIGNING_SECRET = process.env.SLACK_SHADOW_ME_SIGNING_SECRET ?? "";
@@ -17,7 +17,7 @@ function verifySlackRequest(
   body: string,
 ): boolean {
   const fiveMinutesAgo = Math.floor(Date.now() / 1000) - 60 * 5;
-  if (parseInt(timestamp) < fiveMinutesAgo) return false;
+  if (parseInt(timestamp, 10) < fiveMinutesAgo) return false;
 
   const expected =
     "v0=" +
