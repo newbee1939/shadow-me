@@ -10,6 +10,7 @@ import { WebClient } from "@slack/web-api";
 const BOT_TOKEN = process.env.SLACK_SHADOW_ME_BOT_TOKEN ?? "";
 const SIGNING_SECRET = process.env.SLACK_SHADOW_ME_SIGNING_SECRET ?? "";
 
+// reference: https://docs.slack.dev/authentication/verifying-requests-from-slack/
 function verifySlackRequest(
   signingSecret: string,
   signature: string,
