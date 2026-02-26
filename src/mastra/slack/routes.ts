@@ -47,7 +47,7 @@ export const slackRoutes = [
         return c.json({ ok: true });
       }
 
-      const message = (event.text ?? "").replace(/<@[A-Z0-9]+>/g, "").trim();
+      const message = (event.text ?? "").replace(/<@[A-Za-z0-9]+>/g, "").trim();
       const slackClient = new WebClient(BOT_TOKEN);
       const mastra = c.get("mastra");
 
