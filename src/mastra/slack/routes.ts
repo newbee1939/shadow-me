@@ -95,6 +95,7 @@ export const slackRoutes = [
               ts: threadTs,
             });
             const history = (replies.messages ?? [])
+              // filter out the current message
               .filter((m) => m.ts !== event.ts)
               .map((m) => {
                 const author = m.bot_id ? "Agent" : "User";
