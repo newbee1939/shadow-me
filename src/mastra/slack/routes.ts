@@ -77,6 +77,10 @@ export const slackRoutes = [
       const slackClient = new WebClient(BOT_TOKEN);
       const mastra = c.get("mastra");
 
+      // Fire-and-forget: Slack requires a response within 3 seconds or it will
+      // retry the request. Since agent processing takes longer than that, we
+      // kick off the work in the background without awaiting it, then immediately
+      // return 200 OK below. Once done, the result is posted back via chat.postMessage.
       (async () => {
         try {
           const agent = mastra.getAgent("shadowMeAgent");
