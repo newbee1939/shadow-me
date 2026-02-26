@@ -84,17 +84,14 @@ export const slackRoutes = [
       (async () => {
         try {
           const agent = mastra.getAgent("shadowMeAgent");
-          const stream = await agent.stream(message, {
+          const result = await agent.generate(message, {
             memory: {
               resource: `slack-${payload.team_id}-${event.user}`,
               thread: `slack-${event.channel}-${event.thread_ts ?? event.ts}`,
             },
           });
 
-          let text = "";
-          for await (const chunk of stream.fullStream) {
-            if (chunk.type === "text-delta") text += chunk.payload.text ?? "";
-          }
+          const text = result.text;
 
           await slackClient.chat.postMessage({
             channel: event.channel,
