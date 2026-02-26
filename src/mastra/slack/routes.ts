@@ -3,72 +3,13 @@
  * Request URL: https://<your-host>/slack/shadow-me/events
  */
 
-import * as crypto from "node:crypto";
 import { registerApiRoute } from "@mastra/core/server";
 import { WebClient } from "@slack/web-api";
+import { createPrompt } from "./prompt.js";
+import { verifySlackRequest } from "./verify.js";
 
 const BOT_TOKEN = process.env.SLACK_SHADOW_ME_BOT_TOKEN ?? "";
 const SIGNING_SECRET = process.env.SLACK_SHADOW_ME_SIGNING_SECRET ?? "";
-
-// reference: https://docs.slack.dev/authentication/verifying-requests-from-slack/
-function verifySlackRequest(
-  signingSecret: string,
-  signature: string,
-  timestamp: string,
-  body: string,
-): boolean {
-  const fiveMinutesAgo = Math.floor(Date.now() / 1000) - 60 * 5;
-  // Reject requests older than 5 minutes to prevent replay attacks.
-  // Even if an attacker captures a valid signed request, they cannot reuse it
-  // after the 5-minute window has passed.
-  if (parseInt(timestamp, 10) < fiveMinutesAgo) {
-    return false;
-  }
-
-  const expected =
-    "v0=" +
-    crypto
-      .createHmac("sha256", signingSecret)
-      .update(`v0:${timestamp}:${body}`, "utf8")
-      .digest("hex");
-
-  if (
-    Buffer.byteLength(signature, "utf8") !== Buffer.byteLength(expected, "utf8")
-  ) {
-    return false;
-  }
-
-  return crypto.timingSafeEqual(
-    Buffer.from(expected, "utf8"),
-    Buffer.from(signature, "utf8"),
-  );
-}
-
-async function createPrompt(
-  slackClient: WebClient,
-  channel: string,
-  threadTs: string | undefined,
-  currentTs: string,
-  message: string,
-): Promise<string> {
-  if (!threadTs) {
-    return message;
-  }
-
-  const replies = await slackClient.conversations.replies({
-    channel,
-    ts: threadTs,
-  });
-  const history = (replies.messages ?? [])
-    // filter out the current message
-    .filter((m) => m.ts !== currentTs)
-    .map((m) => `${m.user}: ${m.text}`)
-    .join("\n");
-
-  return history
-    ? `Previous thread messages:\n${history}\n\nUser: ${message}`
-    : message;
-}
 
 export const slackRoutes = [
   registerApiRoute("/slack/shadow-me/events", {
