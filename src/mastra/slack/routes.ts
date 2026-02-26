@@ -88,6 +88,7 @@ export const slackRoutes = [
           // If this is inside a thread, fetch prior messages to provide context
           // for the first time the agent is mentioned in an existing thread.
           let prompt = message;
+          // thread_ts is the timestamp of the first message in the thread
           const threadTs = event.thread_ts;
           if (threadTs) {
             const replies = await slackClient.conversations.replies({
