@@ -77,6 +77,7 @@ export const slackRoutes = [
       const body = await c.req.text();
       const payload = JSON.parse(body);
 
+      // url_verification is a request to verify the URL of the Slack app
       if (payload.type === "url_verification") {
         return c.json({ challenge: payload.challenge });
       }
