@@ -110,6 +110,7 @@ export const slackRoutes = [
       (async () => {
         try {
           const agent = mastra.getAgent("shadowMeAgent");
+
           const prompt = await createPrompt(
             slackClient,
             event.channel,
@@ -117,9 +118,10 @@ export const slackRoutes = [
             event.ts,
             message,
           );
-          const result = await agent.generate(prompt);
 
-          const text = result.text;
+          const agentMessage = await agent.generate(prompt);
+
+          const { text } = agentMessage;
 
           await slackClient.chat.postMessage({
             channel: event.channel,
