@@ -44,6 +44,32 @@ function verifySlackRequest(
   );
 }
 
+async function createPrompt(
+  slackClient: WebClient,
+  channel: string,
+  threadTs: string | undefined,
+  currentTs: string,
+  message: string,
+): Promise<string> {
+  if (!threadTs) {
+    return message;
+  }
+
+  const replies = await slackClient.conversations.replies({
+    channel,
+    ts: threadTs,
+  });
+  const history = (replies.messages ?? [])
+    // filter out the current message
+    .filter((m) => m.ts !== currentTs)
+    .map((m) => `${m.user}: ${m.text}`)
+    .join("\n");
+
+  return history
+    ? `Previous thread messages:\n${history}\n\nUser: ${message}`
+    : message;
+}
+
 export const slackRoutes = [
   registerApiRoute("/slack/shadow-me/events", {
     method: "POST",
@@ -84,31 +110,13 @@ export const slackRoutes = [
       (async () => {
         try {
           const agent = mastra.getAgent("shadowMeAgent");
-
-          // If this is inside a thread, fetch prior messages to provide context
-          // for the first time the agent is mentioned in an existing thread.
-          let prompt = message;
-          // thread_ts is the timestamp of the first message in the thread
-          const threadTs = event.thread_ts;
-          if (threadTs) {
-            const replies = await slackClient.conversations.replies({
-              channel: event.channel,
-              ts: threadTs,
-            });
-            const history = (replies.messages ?? [])
-              // filter out the current message
-              .filter((m) => m.ts !== event.ts)
-              .map((m) => {
-                const author = m.bot_id ? "Agent" : "User";
-                const text = (m.text ?? "").replace(/<@[A-Z0-9]+>/g, "").trim();
-                return `${author}: ${text}`;
-              })
-              .join("\n");
-            if (history) {
-              prompt = `Previous thread messages:\n${history}\n\nUser: ${message}`;
-            }
-          }
-
+          const prompt = await createPrompt(
+            slackClient,
+            event.channel,
+            event.thread_ts,
+            event.ts,
+            message,
+          );
           const result = await agent.generate(prompt);
 
           const text = result.text;
