@@ -106,7 +106,12 @@ export const slackRoutes = [
               thread_ts: event.thread_ts ?? event.ts,
               text: `❌ Error: ${error instanceof Error ? error.message : String(error)}`,
             })
-            .catch(() => {});
+            .catch((postError) => {
+              console.error(
+                "Failed to send error message to Slack:",
+                postError,
+              );
+            });
         }
       })();
 
