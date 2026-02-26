@@ -84,7 +84,30 @@ export const slackRoutes = [
       (async () => {
         try {
           const agent = mastra.getAgent("shadowMeAgent");
-          const result = await agent.generate(message, {
+
+          // If this is inside a thread, fetch prior messages to provide context
+          // for the first time the agent is mentioned in an existing thread.
+          let prompt = message;
+          const threadTs = event.thread_ts;
+          if (threadTs) {
+            const replies = await slackClient.conversations.replies({
+              channel: event.channel,
+              ts: threadTs,
+            });
+            const history = (replies.messages ?? [])
+              .filter((m) => m.ts !== event.ts)
+              .map((m) => {
+                const author = m.bot_id ? "Agent" : "User";
+                const text = (m.text ?? "").replace(/<@[A-Z0-9]+>/g, "").trim();
+                return `${author}: ${text}`;
+              })
+              .join("\n");
+            if (history) {
+              prompt = `Previous thread messages:\n${history}\n\nUser: ${message}`;
+            }
+          }
+
+          const result = await agent.generate(prompt, {
             memory: {
               resource: `slack-${payload.team_id}-${event.user}`,
               thread: `slack-${event.channel}-${event.thread_ts ?? event.ts}`,
