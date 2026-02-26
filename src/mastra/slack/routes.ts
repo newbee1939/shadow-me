@@ -11,6 +11,12 @@ import { verifySlackRequest } from "./verify.js";
 const BOT_TOKEN = process.env.SLACK_SHADOW_ME_BOT_TOKEN ?? "";
 const SIGNING_SECRET = process.env.SLACK_SHADOW_ME_SIGNING_SECRET ?? "";
 
+if (!BOT_TOKEN || !SIGNING_SECRET) {
+  throw new Error(
+    "Missing required Slack environment variables. Please set SLACK_SHADOW_ME_BOT_TOKEN and SLACK_SHADOW_ME_SIGNING_SECRET.",
+  );
+}
+
 export const slackRoutes = [
   registerApiRoute("/slack/shadow-me/events", {
     method: "POST",
