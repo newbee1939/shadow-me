@@ -107,12 +107,7 @@ export const slackRoutes = [
             }
           }
 
-          const result = await agent.generate(prompt, {
-            memory: {
-              resource: `slack-${payload.team_id}-${event.user}`,
-              thread: `slack-${event.channel}-${event.thread_ts ?? event.ts}`,
-            },
-          });
+          const result = await agent.generate(prompt);
 
           const text = result.text;
 
