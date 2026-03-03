@@ -26,7 +26,7 @@
     "@types/node": "^25.3.3",
     "knip": "^5.85.0",
     "lefthook": "^2.1.0",
-    "mastra": "^1.3.3",
+    "mastra": "^1.3.5",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },
