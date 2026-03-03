@@ -35,7 +35,7 @@
     "@mastra/libsql": "^1.6.0",
     "@mastra/loggers": "^1.0.0",
     "@mastra/mcp": "^1.0.0",
-    "@mastra/memory": "^1.5.0",
+    "@mastra/memory": "^1.5.2",
     "@mastra/observability": "^1.2.1",
     "@slack/web-api": "^7.14.1",
     "rss-parser": "^3.13.0",
