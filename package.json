@@ -31,7 +31,7 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@mastra/core": "^1.8.0",
+    "@mastra/core": "^1.13.2",
     "@mastra/libsql": "^1.6.4",
     "@mastra/loggers": "^1.0.0",
     "@mastra/mcp": "^1.1.0",
