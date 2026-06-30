@@ -24,7 +24,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.12",
     "@types/node": "^25.9.3",
-    "knip": "^6.18.0",
+    "knip": "^6.23.0",
     "lefthook": "^2.1.9",
     "mastra": "^1.16.0",
     "typescript": "^6.0.3",
