@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@mastra/core": "^1.50.1",
-    "@mastra/libsql": "^1.15.1",
+    "@mastra/libsql": "^1.16.0",
     "@mastra/loggers": "^1.1.1",
     "@mastra/mcp": "^1.13.1",
     "@mastra/memory": "^1.23.0",
